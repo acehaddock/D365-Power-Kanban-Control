@@ -1,0 +1,21 @@
+{
+    "primaryEntity": {
+        "allowTransitions": true,
+        "logicalName": "account",
+        "swimLaneSource": "statuscode"
+    },
+    "defaultViewId": "",
+    "showCreateButton": true,
+    "showDeleteButton": true,
+    "showDeactivateButton": true,
+    "secondaryEntity": {
+        "allowTransitions": true,
+        "logicalName": "incident",
+        "notificationLookup": "oss_incidentid",
+        "parentLookup": "customerid",
+        "subscriptionLookup": "oss_incidentid",
+        "swimLaneSource": "statuscode",
+        "transitionCallback": "boardViewExtender.onStateTransition"
+    },
+    "customScriptUrl": "/WebResources/oss_/D365BoardView/js/exampleExternalScript.js"
+}
