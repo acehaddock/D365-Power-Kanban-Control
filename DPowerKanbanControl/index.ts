@@ -1,6 +1,11 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as WebApiClient from "xrm-webapi-client";
+import { App, AppProps } from "./components/App";
+
+import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
+type DataSet = ComponentFramework.PropertyTypes.DataSet;
 
 export class DPowerKanbanControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
@@ -26,7 +31,7 @@ export class DPowerKanbanControl implements ComponentFramework.StandardControl<I
      * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
      * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
      */
-    public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
+    public async init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
         // Add control initialization code
         this._notifyOutputChanged = notifyOutputChanged;
@@ -39,7 +44,7 @@ export class DPowerKanbanControl implements ComponentFramework.StandardControl<I
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
-    public async updateView(context: ComponentFramework.Context<IInputs>): void
+    public async updateView(context: ComponentFramework.Context<IInputs>): Promise<void>
     {
         // Add code to update control view
         if (this._context.parameters.primaryDataSet.loading) {
