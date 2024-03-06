@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import * as WebApiClient from "xrm-webapi-client";
 import { App, AppProps } from "./components/App";
 
+// eslint-disable-next-line no-undef
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 
