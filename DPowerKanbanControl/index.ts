@@ -1,6 +1,14 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 export class DPowerKanbanControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+
+    private _container: HTMLDivElement;
+	private _context: ComponentFramework.Context<IInputs>;
+	private _notifyOutputChanged: () => void;
+
+	private config: any = null;
 
     /**
      * Empty constructor.
@@ -21,6 +29,9 @@ export class DPowerKanbanControl implements ComponentFramework.StandardControl<I
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
         // Add control initialization code
+        this._notifyOutputChanged = notifyOutputChanged;
+		this._context = context;
+		this._container = container;
     }
 
 
@@ -28,9 +39,39 @@ export class DPowerKanbanControl implements ComponentFramework.StandardControl<I
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
-    public updateView(context: ComponentFramework.Context<IInputs>): void
+    public async updateView(context: ComponentFramework.Context<IInputs>): void
     {
         // Add code to update control view
+        if (this._context.parameters.primaryDataSet.loading) {
+			return;
+		}
+
+		// Only render once all primary IDs are settled
+		if ((this._context.parameters.primaryDataSet.paging as any).pageSize !== 5000) {
+			this._context.parameters.primaryDataSet.paging.setPageSize(5000);
+			this._context.parameters.primaryDataSet.refresh();
+			
+			return;
+		}
+
+		if (!this.config) {
+			const configName = this._context.parameters.configName.raw;
+			this.config = !configName ? null : await WebApiClient.Retrieve({ entityName: "oss_powerkanbanconfig", alternateKey:  [ { property: "oss_uniquename", value: configName } ], queryParams: "?$select=oss_powerkanbanconfigid" });
+		}
+
+		const props: AppProps = {
+			appId: (this._context as any).page?.appId,
+			primaryEntityLogicalName: this._context.parameters.primaryDataSet.getTargetEntityType(),
+			configId: this.config ? this.config.oss_powerkanbanconfigid : null,
+			primaryEntityId: (context.mode as any).contextInfo.entityId,
+			primaryDataIds: this._context.parameters.primaryDataSet.sortedRecordIds,
+			pcfContext: this._context
+		};
+
+		ReactDOM.render(
+			React.createElement(App, props),
+			this._container
+		);
     }
 
     /**
@@ -49,5 +90,6 @@ export class DPowerKanbanControl implements ComponentFramework.StandardControl<I
     public destroy(): void
     {
         // Add code to cleanup control if necessary
+        ReactDOM.unmountComponentAtNode(this._container);
     }
 }
