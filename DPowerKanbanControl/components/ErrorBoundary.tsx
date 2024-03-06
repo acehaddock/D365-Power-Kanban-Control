@@ -43,8 +43,7 @@ export class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
           alignItems: 'stretch',
         },
         header: [
-          // eslint-disable-next-line deprecation/deprecation
-          theme.fonts.xLargePlus,
+          theme.fonts.xLarge,
           {
             flex: '1 1 auto',
             borderTop: `4px solid ${theme.palette.themePrimary}`,
