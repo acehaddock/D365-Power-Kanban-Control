@@ -4,7 +4,7 @@ import { SplitView } from "./SplitView";
 import { ActionStateProvider } from "../domain/ActionState";
 import { ConfigStateProvider } from "../domain/ConfigState";
 import { ErrorBoundary } from "./ErrorBoundary";
-import { IInputs } from "../PowerKanban/generated/ManifestTypes";
+import { IInputs } from "../generated/ManifestTypes";
 
 export interface AppProps
 {
