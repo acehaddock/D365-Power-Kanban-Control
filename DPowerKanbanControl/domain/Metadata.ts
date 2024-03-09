@@ -39,14 +39,6 @@ export interface StringValue {
     Value: string;
 }
 
-export interface LocalizedLabel {
-    Label: string;
-    LanguageCode: number;
-    IsManaged: boolean;
-    MetadataId: string;
-    HasChanged?: any;
-}
-
 export interface Option {
     Value: number;
     Color: string;

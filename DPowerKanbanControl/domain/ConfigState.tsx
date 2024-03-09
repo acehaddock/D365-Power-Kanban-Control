@@ -74,16 +74,16 @@ function stateReducer(state: ConfigStateProps, action: Action): ConfigStateProps
 }
 
 const ConfigState = React.createContext<ConfigStateProps | undefined>(undefined);
-const ConfigDispatch = React.createContext<ConfigDispatch | undefined>(undefined);
+const ConfigDispatchContext = React.createContext<ConfigDispatch | undefined>(undefined);
 
 export const ConfigStateProvider: React.FC<ConfigStateProps> = (props) => {
     const [state, dispatch] = React.useReducer(stateReducer, props ?? {});
 
     return (
         <ConfigState.Provider value={state}>
-            <ConfigDispatch.Provider value={dispatch}>
+            <ConfigDispatchContext.Provider value={dispatch}>
                 {props.children}
-            </ConfigDispatch.Provider>
+            </ConfigDispatchContext.Provider>
         </ConfigState.Provider>
     );
 };
@@ -99,7 +99,7 @@ export const useConfigState = () => {
 };
 
 export const useConfigDispatch = () => {
-    const context = React.useContext(ConfigDispatch);
+    const context = React.useContext(ConfigDispatchContext);
 
     if (!context) {
         throw new Error("useConfigDispatch must be used within a state provider!");
