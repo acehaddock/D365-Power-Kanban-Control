@@ -89,16 +89,16 @@ function stateReducer(state: ActionStateProps, action: Action): ActionStateProps
 }
 
 const ActionState = React.createContext<ActionStateProps | undefined>(undefined);
-const ActionDispatch = React.createContext<ActionDispatch | undefined>(undefined);
+const ActionDispatchContext = React.createContext<ActionDispatch | undefined>(undefined);
 
 export function ActionStateProvider({ children }: ActionContextProps) {
     const [state, dispatch] = React.useReducer(stateReducer, { });
 
     return (
         <ActionState.Provider value={state}>
-            <ActionDispatch.Provider value={dispatch}>
+            <ActionDispatchContext.Provider value={dispatch}>
                 {children}
-            </ActionDispatch.Provider>
+            </ActionDispatchContext.Provider>
         </ActionState.Provider>
     );
 }
@@ -114,7 +114,7 @@ export function useActionState() {
 }
 
 export function useActionDispatch() {
-    const context = React.useContext(ActionDispatch);
+    const context = React.useContext(ActionDispatchContext);
 
     if (!context) {
         throw new Error("useActionDispatch must be used within a state provider!");
